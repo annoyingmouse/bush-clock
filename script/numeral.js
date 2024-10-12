@@ -1,18 +1,7 @@
 import { sketch } from "https://cdn.skypack.dev/p5js-wrapper";
 import "https://cdn.skypack.dev/p5js-wrapper/sound";
 import { numerals as numberMaps } from "./numerals.js";
-import {
-	rustleSoundZeroMP3,
-	rustleSoundOneMP3,
-	rustleSoundTwoMP3,
-	rustleSoundThreeMP3,
-	rustleSoundFourMP3,
-	rustleSoundFiveMP3,
-	rustleSoundSixMP3,
-	rustleSoundSevenMP3,
-	rustleSoundEightMP3,
-	rustleSoundNineMP3,
-} from "./sounds.js";
+import { MP3s } from "./sounds.js";
 
 let down,
 	right_up,
@@ -29,7 +18,7 @@ let down,
 	dotBig,
 	rustles;
 
-sketch.preload = function () {
+sketch.preload = function() {
 	down = loadImage("../image/bottom-half.png");
 	right_up = loadImage("../image/bottom-left.png");
 	left_up = loadImage("../image/bottom-right.png");
@@ -43,18 +32,9 @@ sketch.preload = function () {
 	down_left_up = loadImage("../image/vertical-middle-left.png");
 	down_right_up = loadImage("../image/vertical-middle-right.png");
 	dotBig = loadImage("../image/dot-big.png");
-	rustles = [
-		loadSound(rustleSoundZeroMP3),
-		loadSound(rustleSoundOneMP3),
-		loadSound(rustleSoundTwoMP3),
-		loadSound(rustleSoundThreeMP3),
-		loadSound(rustleSoundFourMP3),
-		loadSound(rustleSoundFiveMP3),
-		loadSound(rustleSoundSixMP3),
-		loadSound(rustleSoundSevenMP3),
-		loadSound(rustleSoundEightMP3),
-		loadSound(rustleSoundNineMP3),
-	];
+	for (let i = 0; i < MP3s.length; i++) {
+		rustles.push(loadSound(MP3s[i]));
+	}
 };
 
 function checkDirection(grid, row, col) {
