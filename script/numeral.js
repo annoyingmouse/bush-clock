@@ -16,7 +16,7 @@ let down,
 	down_left_up,
 	down_right_up,
 	dotBig,
-	rustles;
+	rustles = [];
 
 sketch.preload = function() {
 	down = loadImage("../image/bottom-half.png");
@@ -32,7 +32,7 @@ sketch.preload = function() {
 	down_left_up = loadImage("../image/vertical-middle-left.png");
 	down_right_up = loadImage("../image/vertical-middle-right.png");
 	dotBig = loadImage("../image/dot-big.png");
-	for (let i = 0; i < MP3s.length; i++) {
+	for (let i = 0; i < 10; i++) {
 		rustles.push(loadSound(MP3s[i]));
 	}
 };
