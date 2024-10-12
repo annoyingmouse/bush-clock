@@ -1,35 +1,83 @@
-import { sketch } from "https://cdn.skypack.dev/p5js-wrapper";
+const one = [
+  [0, 1, 0],
+  [0, 1, 0],
+  [0, 1, 0],
+  [0, 1, 0],
+  [0, 1, 0],
+]
+const two = [
+  [1, 1, 1],
+  [0, 0, 1],
+  [1, 1, 1],
+  [1, 0, 0],
+  [1, 1, 1],
+]
+const three = [
+  [1, 1, 1],
+  [0, 0, 1],
+  [0, 1, 1],
+  [0, 0, 1],
+  [1, 1, 1],
+]
+const four = [
+  [1, 0, 1],
+  [1, 0, 1],
+  [1, 1, 1],
+  [0, 0, 1],
+  [0, 0, 1],
+]
+const five = [
+  [1, 1, 1],
+  [1, 0, 0],
+  [1, 1, 1],
+  [0, 0, 1],
+  [1, 1, 1],
+]
+const six = [
+  [1, 1, 1],
+  [1, 0, 0],
+  [1, 1, 1],
+  [1, 0, 1],
+  [1, 1, 1],
+]
+const seven = [
+  [1, 1, 1],
+  [0, 0, 1],
+  [0, 0, 1],
+  [0, 0, 1],
+  [0, 0, 1],
+]
+const eight = [
+  [1, 1, 1],
+  [1, 0, 1],
+  [1, 1, 1],
+  [1, 0, 1],
+  [1, 1, 1],
+]
+const nine = [
+  [1, 1, 1],
+  [1, 0, 1],
+  [1, 1, 1],
+  [0, 0, 1],
+  [1, 1, 1],
+]
+const zero = [
+  [1, 1, 1],
+  [1, 0, 1],
+  [1, 0, 1],
+  [1, 0, 1],
+  [1, 1, 1],
+]
 
-let topHalf, verticalMiddle, bottomHalf;
-
-sketch.preload = function () {
-  topHalf = loadImage("../image/top-half.png");
-  verticalMiddle = loadImage("../image/vertical-middle.png");
-  bottomHalf = loadImage("../image/bottom-half.png");
-}
-
-export function drawOne (x, y, rustle) {
-  // if(proper === 0){
-  image(topHalf, x + 16, y);
-  image(verticalMiddle, x + 16, y + 16);
-  // } else {
-  // 	image(top, x + 16, y);
-  // }
-  image(verticalMiddle, x + 16, y + 32);
-  image(verticalMiddle, x + 16, y + 48);
-  image(verticalMiddle, x + 16, y + 64);
-  image(verticalMiddle, x + 16, y + 80);
-
-  // switch (proper) {
-  // 	case 0:
-  // 		image(bottom, x + 16, y + 96);
-  // 		break;
-  // 	case 1:
-  image(verticalMiddle, x + 16, y + 96);
-  image(bottomHalf, x + 16, y + 112);
-// 		break;
-// 	case 2:
-// 		image(bottomProper, x + 16, y + 96);
-// 		break;
-// }
-}
+export const numerals = [
+  structuredClone(zero),
+  structuredClone(one),
+  structuredClone(two),
+  structuredClone(three),
+  structuredClone(four),
+  structuredClone(five),
+  structuredClone(six),
+  structuredClone(seven),
+  structuredClone(eight),
+  structuredClone(nine)
+]

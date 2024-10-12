@@ -1,5 +1,6 @@
 import { sketch } from "https://cdn.skypack.dev/p5js-wrapper";
 import "https://cdn.skypack.dev/p5js-wrapper/sound";
+import { numerals as numberMaps } from "./numerals.js";
 import {
 	rustleSoundZeroMP3,
 	rustleSoundOneMP3,
@@ -41,8 +42,6 @@ let bottom,
 	rustleSoundEight,
 	rustleSoundNine;
 
-let proper = 0;
-
 sketch.preload = function () {
 	bottom = loadImage("../image/bottom.png");
 	bottomProper = loadImage("../image/bottom-proper.png");
@@ -73,178 +72,180 @@ sketch.preload = function () {
 	rustleSoundNine = loadSound(rustleSoundNineMP3);
 };
 
+function checkDirection(grid, row, col) {
+	let directions = [];
+
+	// Get the dimensions of the 2D array
+	const numRows = grid.length;
+	const numCols = grid[0].length;
+
+	// Check UP (above the current element)
+	if (row > 0 && grid[row - 1][col]) {
+		directions.push("up");
+	}
+
+	// Check DOWN (below the current element)
+	if (row < numRows - 1 && grid[row + 1][col]) {
+		directions.push("down");
+	}
+
+	// Check LEFT (left of the current element)
+	if (col > 0 && grid[row][col - 1]) {
+		directions.push("left");
+	}
+
+	// Check RIGHT (right of the current element)
+	if (col < numCols - 1 && grid[row][col + 1]) {
+		directions.push("right");
+	}
+
+	// // Check TOP-LEFT (diagonal up-left)
+	// if (row > 0 && col > 0 && grid[row - 1][col - 1] === true) {
+	// 	directions.push("top-left");
+	// }
+	//
+	// // Check TOP-RIGHT (diagonal up-right)
+	// if (row > 0 && col < numCols - 1 && grid[row - 1][col + 1] === true) {
+	// 	directions.push("top-right");
+	// }
+	//
+	// // Check BOTTOM-LEFT (diagonal down-left)
+	// if (row < numRows - 1 && col > 0 && grid[row + 1][col - 1] === true) {
+	// 	directions.push("bottom-left");
+	// }
+	//
+	// // Check BOTTOM-RIGHT (diagonal down-right)
+	// if (row < numRows - 1 && col < numCols - 1 && grid[row + 1][col + 1] === true) {
+	// 	directions.push("bottom-right");
+	// }
+	return directions;
+}
+
+function drawHedge(hedgeMap, x, y) {
+	let level
+	for (let i = 0; i < hedgeMap.length; i++) {
+		for (let j = 0; j < hedgeMap[i].length; j++) {
+			if (hedgeMap[i][j] === 1) {
+				const directions = checkDirection(hedgeMap, i, j).sort().join("-");
+				if (i % 2 === 0) {
+					level = i === 0 ? 0 : i === 2 ? 48 : 96;
+					if (directions === "down-right") {
+						image(topLeft, x + j * 16, y + level);
+					}
+					if (directions === "left-right") {
+						image(middle, x + j * 16, y + level);
+					}
+					if (directions === "down-left") {
+						image(topRight, x + j * 16, y + level);
+					}
+					if (directions === "right-up") {
+						image(bottomLeft, x + j * 16, y + level);
+					}
+					if (directions === "left-up") {
+						image(bottomRight, x + j * 16, y + level);
+					}
+					if(directions === "down-right-up") {
+						image(verticalMiddleRight, x + j * 16, y + level);
+					}
+					if(directions === "down-left-up") {
+						image(verticalMiddleLeft, x + j * 16, y + level);
+					}
+					if(directions === "down-up") {
+						image(verticalMiddle, x + j * 16, y + level);
+						image(verticalMiddle, x + j * 16, (y + level) + 16);
+					}
+					if(directions === "left") {
+						image(rightEnd, x + j * 16, y + level);
+					}
+					if(directions === "right") {
+						image(leftEnd, x + j * 16, y + level);
+					}
+					if(directions === "up") {
+						image(verticalMiddle, x + j * 16, y + level);
+						image(bottomHalf, x + j * 16, (y + level) + 16);
+					}
+					if(directions === "down") {
+						image(topHalf, x + j * 16, (y + level));
+						image(verticalMiddle, x + j * 16, y + level + 16);
+					}
+					console.log(directions)
+				} else {
+					level = i === 1 ? 32 : 80;
+					if(directions === "down-up") {
+						image(verticalMiddle, x + j * 16, y + level);
+					}
+				}
+			}
+		}
+	}
+}
+
 export function drawNumeral(num, x, y, sound) {
 	const numerals = {
-		0: (x, y, sound) => {
+		0: (x, y, sound, num) => {
 			if (sound) {
 				rustleSoundZero.play();
 			}
-			image(topLeft, x, y);
-			image(middle, x + 16, y);
-			image(topRight, x + 32, y);
-			image(verticalMiddle, x, y + 32);
-			image(verticalMiddle, x, y + 48);
-			image(verticalMiddle, x, y + 64);
-			image(verticalMiddle, x, y + 80);
-			image(verticalMiddle, x + 32, y + 32);
-			image(verticalMiddle, x + 32, y + 48);
-			image(verticalMiddle, x + 32, y + 64);
-			image(verticalMiddle, x + 32, y + 80);
-			image(bottomLeft, x, y + 96);
-			image(middle, x + 16, y + 96);
-			image(bottomRight, x + 32, y + 96);
+			drawHedge(numberMaps[num], x, y);
 		},
-		1: (x, y, sound) => {
+		1: (x, y, sound, num) => {
 			if (sound) {
 				rustleSoundOne.play();
 			}
-			image(topHalf, x + 16, y);
-			image(verticalMiddle, x + 16, y + 16);
-			image(verticalMiddle, x + 16, y + 32);
-			image(verticalMiddle, x + 16, y + 48);
-			image(verticalMiddle, x + 16, y + 64);
-			image(verticalMiddle, x + 16, y + 80);
-			image(verticalMiddle, x + 16, y + 96);
-			image(bottomHalf, x + 16, y + 112);
+			drawHedge(numberMaps[num], x, y);
 		},
-		2: (x, y, sound) => {
+		2: (x, y, sound, num) => {
 			if (sound) {
 				rustleSoundTwo.play();
 			}
-			image(leftEnd, x, y);
-			image(middle, x + 16, y);
-			image(topRight, x + 32, y);
-			image(verticalMiddle, x + 32, y + 32);
-			image(topLeft, x, y + 48);
-			image(middle, x + 16, y + 48);
-			image(bottomRight, x + 32, y + 48);
-			image(verticalMiddle, x, y + 64);
-			image(verticalMiddle, x, y + 80);
-			image(bottomLeft, x, y + 96);
-			image(middle, x + 16, y + 96);
-			image(rightEnd, x + 32, y + 96);
+			drawHedge(numberMaps[num], x, y);
 		},
-		3: (x, y, sound) => {
+		3: (x, y, sound, num) => {
 			if (sound) {
 				rustleSoundThree.play();
 			}
-			image(leftEnd, x, y);
-			image(middle, x + 16, y);
-			image(topRight, x + 32, y);
-			image(verticalMiddle, x + 32, y + 32);
-			image(leftEnd, x + 16, y + 48);
-			image(verticalMiddleLeft, x + 32, y + 48);
-			image(verticalMiddle, x + 32, y + 80);
-			image(leftEnd, x, y + 96);
-			image(middle, x + 16, y + 96);
-			image(bottomRight, x + 32, y + 96);
+			drawHedge(numberMaps[num], x, y);
 		},
-		4: (x, y, sound) => {
+		4: (x, y, sound, num) => {
 			if (sound) {
 				rustleSoundFour.play();
 			}
-			image(topHalf, x, y);
-			image(verticalMiddle, x, y + 16);
-			image(topHalf, x + 32, y);
-			image(verticalMiddle, x + 32, y + 16);
-			image(verticalMiddle, x, y + 32);
-			image(verticalMiddle, x + 32, y + 32);
-			image(bottomLeft, x, y + 48);
-			image(middle, x + 16, y + 48);
-			image(verticalMiddleLeft, x + 32, y + 48);
-			image(verticalMiddle, x + 32, y + 80);
-			image(verticalMiddle, x + 32, y + 96);
-			image(bottomHalf, x + 32, y + 112);
+			drawHedge(numberMaps[num], x, y);
 		},
-		5: (x, y, sound) => {
+		5: (x, y, sound, num) => {
 			if (sound) {
 				rustleSoundFive.play();
 			}
-			image(topLeft, x, y);
-			image(middle, x + 16, y);
-			image(rightEnd, x + 32, y);
-			image(verticalMiddle, x, y + 32);
-			image(bottomLeft, x, y + 48);
-			image(middle, x + 16, y + 48);
-			image(topRight, x + 32, y + 48);
-			image(verticalMiddle, x + 32, y + 80);
-			image(leftEnd, x, y + 96);
-			image(middle, x + 16, y + 96);
-			image(bottomRight, x + 32, y + 96);
+			drawHedge(numberMaps[num], x, y);
 		},
-		6: (x, y, sound) => {
+		6: (x, y, sound, num) => {
 			if (sound) {
 				rustleSoundSix.play();
 			}
-			image(topLeft, x, y);
-			image(middle, x + 16, y);
-			image(rightEnd, x + 32, y);
-			image(verticalMiddle, x, y + 32);
-			image(verticalMiddleRight, x, y + 48);
-			image(middle, x + 16, y + 48);
-			image(topRight, x + 32, y + 48);
-			image(verticalMiddle, x, y + 80);
-			image(verticalMiddle, x + 32, y + 80);
-			image(bottomLeft, x, y + 96);
-			image(middle, x + 16, y + 96);
-			image(bottomRight, x + 32, y + 96);
+			drawHedge(numberMaps[num], x, y);
 		},
-		7: (x, y, sound) => {
+		7: (x, y, sound, num) => {
 			if (sound) {
 				rustleSoundSeven.play();
 			}
-			image(leftEnd, x, y);
-			image(middle, x + 16, y);
-			image(topRight, x + 32, y);
-			image(verticalMiddle, x + 32, y + 32);
-			image(verticalMiddle, x + 32, y + 48);
-			image(verticalMiddle, x + 32, y + 64);
-			image(verticalMiddle, x + 32, y + 80);
-			image(verticalMiddle, x + 32, y + 96);
-			image(bottomHalf, x + 32, y + 112);
+			drawHedge(numberMaps[num], x, y);
 		},
-		8: (x, y, sound) => {
+		8: (x, y, sound, num) => {
 			if (sound) {
 				rustleSoundEight.play();
 			}
-			image(topLeft, x, y);
-			image(middle, x + 16, y);
-			image(topRight, x + 32, y);
-			image(verticalMiddle, x, y + 32);
-			image(verticalMiddle, x + 32, y + 32);
-			image(verticalMiddleRight, x, y + 48);
-			image(middle, x + 16, y + 48);
-			image(verticalMiddleLeft, x + 32, y + 48);
-			image(verticalMiddle, x, y + 80);
-			image(verticalMiddle, x + 32, y + 80);
-			image(bottomLeft, x, y + 96);
-			image(middle, x + 16, y + 96);
-			image(bottomRight, x + 32, y + 96);
+			drawHedge(numberMaps[num], x, y);
 		},
-		9: (x, y, sound) => {
+		9: (x, y, sound, num) => {
 			if (sound) {
 				rustleSoundNine.play();
 			}
-			image(topLeft, x, y);
-			image(middle, x + 16, y);
-			image(topRight, x + 32, y);
-			image(verticalMiddle, x, y + 32);
-			image(verticalMiddle, x + 32, y + 32);
-			image(bottomLeft, x, y + 48);
-			image(middle, x + 16, y + 48);
-			image(verticalMiddleLeft, x + 32, y + 48);
-			image(verticalMiddle, x + 32, y + 80);
-			image(leftEnd, x, y + 96);
-			image(middle, x + 16, y + 96);
-			image(bottomRight, x + 32, y + 96);
+			drawHedge(numberMaps[num], x, y);
 		},
 		":": (x, y) => {
 			image(dotBig, x + 8, y + 24);
+			image(dotBig, x + 8, y + 64);
 		},
 	};
-	numerals[num](x, y, sound);
-	proper++;
-	if (proper === 3) {
-		proper = 0;
-	}
+	numerals[num](x, y, sound, num);
 }
