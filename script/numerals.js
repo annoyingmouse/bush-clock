@@ -81,3 +81,31 @@ export const numerals = [
 	structuredClone(eight),
 	structuredClone(nine),
 ];
+
+export const imageTiles = [
+	"dot",
+	"down",
+	"down_left",
+	"down_left_up",
+	"down_right",
+	"down_right_up",
+	"left",
+	"left_right",
+	"left_up",
+	"right",
+	"right_up",
+	"top",
+	"vertical",
+];
+
+export const evaluatable = [
+	"down_left",
+	"down_left_up",
+	"down_right",
+	"down_right_up",
+	"left",
+	"left_right",
+	"left_up",
+	"right",
+	"right_up",
+];
